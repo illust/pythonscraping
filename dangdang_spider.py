@@ -11,13 +11,13 @@ socket.setdefaulttimeout(20) # 设置socket层的超时时间为20秒，在reque
 url = "http://search.dangdang.com/?key=python&act=input&page_index="
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11'
 headers = {"user_agent":user_agent}
-index = 2
+index = 1
 booksDict = {}
 
 bookUrl = []
 bookInfo = []
 i = 0
-while index <= 10:
+while index <= 20:
 	# 发起请求
 	request = urllib.request.Request(url=url+str(index),headers=headers)
 	
