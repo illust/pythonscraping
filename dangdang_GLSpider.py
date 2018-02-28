@@ -4,46 +4,48 @@ from bs4 import BeautifulSoup
 import urllib.request
 import socket
 
-# socket.setdefaulttimeout(20)
+socket.setdefaulttimeout(20)
 
-# url = 'http://category.dangdang.com/'
+url = 'http://category.dangdang.com/'
 
-# user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11'
-# headers = {"user_agent":user_agent}
+user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11'
+headers = {"user_agent":user_agent}
 
-# request = urllib.request.Request(url,headers=headers)
-# reponse = urllib.request.urlopen(request)
-# soup = BeautifulSoup(reponse,"html.parser")
-
-
-reponse = "D:\categories.html"
-soup = BeautifulSoup(open(reponse),"html.parser")
+request = urllib.request.Request(url,headers=headers)
+response = urllib.request.urlopen(request)
+soup = BeautifulSoup(response,"html.parser")
 
 
-leftCtgs = soup.find_all("div",class_="classify_left")	# 当当网分类页左，右两部分
-rightCtgs = soup.find_all("div",class_="classify_right")
+# response = "D:\categories.html"
+# soup = BeautifulSoup(open(response),"html.parser")
 
-# i = 0
-# for item in leftCtgs[0].div.children:
-# 	i = i + 1
-# 	print(i)
-# 	ims = item.find_all("a",href=re.compile("^http://category.*?html$"))
-# 	for im in ims:
-# 		print(im.get_text())
-# 		#print("\n")
-# 	print('\n')
-bigCtgs = []
-lgoodsCtgs = leftCtgs[0].find_all("div",{"class":"classify_books_detail"})
-rgoodsCtgs = rightCtgs[0].find_all("div",{"class":"classify_books_detail"})
 
-for item in lgoodsCtgs:
-	bigCtgs.append(item.get_text())
-	print(item.get_text())
-	print('\n')
+classify_left = soup.find_all("div",class_="classify_left")	# 当当网分类页左，右两部分
+classify_right = soup.find_all("div",class_="classify_right")
 
-for item in rgoodsCtgs:
-	bigCtgs.append(item.get_text())
-	print(item.get_text())
-	print('\n')
 
-print(bigCtgs)
+cbooks = classify_left[0].find_all("div",class_="classify_books",recursive=False)
+
+class GetCtg:
+	def __init__(self,cbooks):
+		self.classify_books = cbooks
+
+	def CtgShow(self):
+		cat_1 = {}
+		for i in range(len(self.classify_books)):
+			ct1 = self.classify_books[i].find("a").get_text() # 第一层目录，比如 图书等等
+			classify_kind = self.classify_books[i].find_all("div",class_="classify_kind",recursive=False)
+			cat_2 = {}
+			for j in range(len(classify_kind)):
+				ct2 = classify_kind[j].find("a").get_text() # 第二层目录，比如 青春文学等等
+				classify_kind_detail = classify_kind[j].find_all("ul",class_="classify_kind_detail")
+				cat_3 = []
+				for item in classify_kind_detail[0]:
+					cat_3.append(item.get_text()) # 第三层目录，比如 校园等等
+				cat_2[ct2] = cat_3
+			cat_1[ct1] = cat_2 
+		print(cat_1)
+
+Instance = GetCtg(cbooks)
+Instance.CtgShow()
+
