@@ -43,7 +43,7 @@ class GetCtg:
 				classify_kind_detail = classify_kind[j].find_all("ul",class_="classify_kind_detail")
 				cat_3 = {}
 				for item in classify_kind_detail[0]:
-					cat_3[item.get_text()] = item.find('a').get('href')[29:-5] # 第三层目录，比如 校园等等
+					cat_3[item.get_text()] = item.find('a').get('href')[29:-5] # 第三层目录，比如 校园等等，与对应url映射
 				cat_2[ct2] = cat_3
 			cat_1[ct1] = cat_2 
 		print(cat_1)
