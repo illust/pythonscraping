@@ -52,7 +52,7 @@ class getSku:
 
 	# 遍历某分类目录下多页商品
 	# 有些目录页数过多，暂取前一部分网页商品信息
-	def lookALlPage(self):
+	def lookAllPage(self):
 		if self.pageNum <= 20:	# 页数大于等于2且小于等于20页时
 			if self.pageNum >= 2:
 				for p in range(2,self.pageNum+1):
@@ -77,7 +77,7 @@ class getSku:
 		# request = urllib.request.Request(self.url,headers=headers)
 		# response = urllib.request.urlopen(request)
 		# soup = BeautifulSoup(response,"html.parser")
-		books = self.soup.find_all('a',href=re.compile("^http://product.*?html$"),dd_name="单品图片")		
+		books = self.soup.find_all('a',href=re.compile("^http://product.*?html$"),dd_name=u"单品图片")		
 		i = 0
 		for item in books:
 			i = i + 1
@@ -92,6 +92,6 @@ print(p.getSoup())
 p.PageNum()
 print(p.getPageNum())
 
-p.lookALlPage()
+p.lookAllPage()
 #print(p.getPgUrl())
 print(p.getSkuUrl())
