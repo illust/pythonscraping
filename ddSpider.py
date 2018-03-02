@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import re
 from bs4 import BeautifulSoup
 import urllib.request
@@ -12,16 +14,20 @@ headers = {"user_agent":user_agent}
 
 url = 'http://category.dangdang.com/cp01.54.06.00.00.00.html'
 
+bkDict = {}
+
 for i in range(2,21):
+	print(i)
 	pageUrl = url[:29]+'pg'+str(i)+'-'+url[29:]
 	p = getSku(pageUrl)
 	p.parse()
-	print("test...")
-	print(p.getSoup().title)
-	# p.PageNum()
-	# #print(p.getPageNum())
-	# p.lookAllPage()
-	# #print(p.getPgUrl())
-	# p.getSkuUrl()
-	# #print(p.getSkuUrl())
+	gs = p.getSkuUrl()
+	bkDict['page'+str(i)] = gs
+	print(gs)
+	print('\n')
 	# p.savePageUrl()
+
+jsObj = json.dumps(bkDict,ensure_ascii=False)
+fileObj = open('bkDict.json','w')
+fileObj.write(jsObj)
+fileObj.close()
