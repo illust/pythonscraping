@@ -21,6 +21,11 @@ FEED_EXPORT_ENCODING = 'utf-8'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
+
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0'
+LOG_LEVEL = 'ERROR'
+RETRY_ENABLED = False
+DOWNLOAD_TIMEOUT = 5000000
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
@@ -64,9 +69,9 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'epetSpider.pipelines.EpetspiderPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'epetSpider.pipelines.DuplicatesPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html

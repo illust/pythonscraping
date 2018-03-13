@@ -12,3 +12,8 @@ class epetSpiderItem(Item):
     skuPrice = scrapy.Field()	# 商品价格
     # skuParas = scrapy.Field()	# 商品其他参数
 
+class epetMainSpiderItem(Item):
+
+	link = scrapy.Field()
+	link_text = scrapy.Field()
+
