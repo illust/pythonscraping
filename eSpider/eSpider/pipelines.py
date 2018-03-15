@@ -22,3 +22,11 @@ class DuplicatesPipeline(object):
 		else:
 			self.url_seen.add(item['link'])
 			return item
+
+	# def process_item(self,item,ctgs):
+
+	# 	if item['url'] in self.url_seen:
+	# 		raise DropItem("Duplicate item found: %s" % item)
+	# 	else:
+	# 		self.url_seen.add(item['url'])
+	# 		return item

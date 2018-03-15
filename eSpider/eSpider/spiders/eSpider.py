@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import re
+#from scrapy.exceptions import CloseSpider
+import requests
+from scrapy import Selector
 
 class eSpider(scrapy.Spider):
 
 	name = 'epet'
 	allowed_domains = ['epet.com']
-	start_urls = ['http://list.epet.com/3620.html']
+	start_urls = ['http://www.epet.com']
+	# def __init__(self):
+	# 	self.count = 0 # 设置初始个数
+	# 	self.max_count = 20 # 设置最大个数
+
 
 	def parse(self,response):
 
@@ -17,15 +24,39 @@ class eSpider(scrapy.Spider):
 			if url == None:
 				pass  
 			else:
-				_link = re.compile(r'(http[s]{0,1}):[^\s]*list.epet.com/[^\s]+.html').match(url)
+				_link = re.compile(r'http:[^\s]+list.epet.com/[^\s]+').match(url)
 
 				if _link:
 					item = {}
-					item["link_text"] = link.xpath(".//text()").extract_first()
 					
-					item["link"] = _link[0]
+					txt = link.xpath(".//text()").extract_first()
 
-					yield scrapy.Request(url=_link[0],callback=self.parse)
+					res = requests.get(_link[0])
+					flg = Selector(res).xpath("//body/div[3]/div[3]/div[@class='bgwhite']/@class").extract_first()
+					if flg == 'bgwhite':
+						pass
+					else:
+						if txt == None:
+							item["link_text"] = None
+						else:
+							item["link_text"] = txt.strip(" ").strip("\n")
+						item["link"] = _link[0]
+					
+						yield scrapy.Request(url=_link[0],callback=self.parse)
+	
+						yield item
+					# self.count = self.count + 1
+					# if self.count == self.max_count:
+					# 	raise CloseSpider('The number of extracted data is enough!')
+					
+					
 
-					yield item
+	# def parse_url(self,response):
+	# 	flg = response.xpath("//body/div[3]/div[3]/div[3]/@class").extract_first()
+	# 	if flg == 'bgwhite':
+	# 		return False
+	# 	else:
+	# 		return True
+
+
 
