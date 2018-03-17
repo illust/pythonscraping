@@ -29,17 +29,17 @@ class eSpider(scrapy.Spider):
 				if _link:
 					item = {}
 					
-					txt = link.xpath(".//text()").extract_first()
+					text = link.xpath(".//text()").extract_first()
 
 					res = requests.get(_link[0])
 					flg = Selector(res).xpath("//body/div[3]/div[3]/div[@class='bgwhite']/@class").extract_first()
 					if flg == 'bgwhite':
 						pass
 					else:
-						if txt == None:
+						if text == None:
 							item["link_text"] = None
 						else:
-							item["link_text"] = txt.strip(" ").strip("\n")
+							item["link_text"] = text.strip(" ").strip("\n")
 						item["link"] = _link[0]
 					
 						yield scrapy.Request(url=_link[0],callback=self.parse)
@@ -48,15 +48,7 @@ class eSpider(scrapy.Spider):
 					# self.count = self.count + 1
 					# if self.count == self.max_count:
 					# 	raise CloseSpider('The number of extracted data is enough!')
-					
-					
 
-	# def parse_url(self,response):
-	# 	flg = response.xpath("//body/div[3]/div[3]/div[3]/@class").extract_first()
-	# 	if flg == 'bgwhite':
-	# 		return False
-	# 	else:
-	# 		return True
 
 
 
