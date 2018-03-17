@@ -18,7 +18,7 @@ class DuplicatesPipeline(object):
 	def process_item(self,item,epet):
 
 		if item['link'] in self.url_seen:
-			raise DropItem("Duplicate item found: %s" % item)
+			raise DropItem("Dup item: %s" % item)
 		else:
 			self.url_seen.add(item['link'])
 			return item

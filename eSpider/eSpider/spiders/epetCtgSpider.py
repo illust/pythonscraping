@@ -12,11 +12,11 @@ class epetCtgSpider(scrapy.Spider):
 	
 	def parse(self,response):
 
-		glists = response.xpath("//body/div[3]/div[3]/div[3]")
+		glists = response.xpath("//body/div[3]/div[3]/div[3]//div[@class='list_box-li']")
 
 		for g in glists:		# 遍历商品列表
 			#title = g.xpath("//div[1]/a[@class='gtitle']/@title").extract_first()
-			url = g.xpath("//div[1]/a[@class='gtitle']/@href[1]").extract_first()
+			url = g.xpath("//div[1]/div[1]/a[@class='gtitle']/@href[1]").extract_first()
 
 			yield scrapy.Request(url=url,callback=self.parse_sku)
 
@@ -32,7 +32,7 @@ class epetCtgSpider(scrapy.Spider):
 			item['title'] = None
 		else:
 			item['title'] = title
-		item['url'] = response.url
+		item['link'] = response.url
 		yield item 
 
 			
