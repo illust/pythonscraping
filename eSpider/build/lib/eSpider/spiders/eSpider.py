@@ -32,10 +32,10 @@ class eSpider(scrapy.Spider):
 					# 获得链接内部文本
 					text = link.xpath(".//text()").extract_first()
 					# 重新发起一个请求，查看该list页面是否为空（不含任何商品）
-					res = requests.get(_link.group(0))
-					flg = Selector(res).xpath("//body/div[3]/div[3]/div[@class='bgwhite']/@class").extract_first()
+					# res = requests.get(_link[0])
+					# flg = Selector(res).xpath("//body/div[3]/div[3]/div[@class='bgwhite']/@class").extract_first()
 					# 如果为空，则该分类目录下无商品，视为无效，否则保存链接，继续其他操作
-					# flg = 'contents'
+					flg = 'contents'
 					if flg == 'bgwhite':
 						pass
 					else:
