@@ -14,19 +14,20 @@ class DuplicatesPipeline(object):
 
 	def __init__(self):
 		self.url_seen = set()
+		self.url_seenCtg = set()
 
 	def process_item(self,item,epet):
 
-		if item['link'] in self.url_seen:
+		if item['url'] in self.url_seen:
 			raise DropItem("Dup item: %s" % item)
 		else:
-			self.url_seen.add(item['link'])
+			self.url_seen.add(item['url'])
 			return item
 
 	# def process_item(self,item,ctgs):
-
-	# 	if item['url'] in self.url_seen:
+    #
+	# 	if item['url'] in self.url_seenCtg:
 	# 		raise DropItem("Duplicate item found: %s" % item)
 	# 	else:
-	# 		self.url_seen.add(item['url'])
+	# 		self.url_seenCtg.add(item['url'])
 	# 		return item
