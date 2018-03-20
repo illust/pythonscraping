@@ -23,8 +23,8 @@ ROBOTSTXT_OBEY = False
 FEED_EXPORT_ENCODING = 'utf-8'
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0'
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 16 # not really thinks to https://github.com/scrapy/scrapy/issues/2748 the cute girl
-#CONCURRENT_ITEMS = 1
+CONCURRENT_REQUESTS = 32 # not really thinks to https://github.com/scrapy/scrapy/issues/2748 the cute girl
+# CONCURRENT_ITEMS = 1
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
@@ -59,6 +59,8 @@ CONCURRENT_REQUESTS = 16 # not really thinks to https://github.com/scrapy/scrapy
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
+
+# issue1 code
 # EXTENSIONS = {
 #    'eSpider.extensions.closespider.CloseSpider': 500,
 # }
@@ -77,9 +79,9 @@ CONCURRENT_REQUESTS = 16 # not really thinks to https://github.com/scrapy/scrapy
 #ITEM_PIPELINES = {
 #    'eSpider.pipelines.EspiderPipeline': 300,
 #}
-# ITEM_PIPELINES = {
-#    'eSpider.pipelines.DuplicatesPipeline': 300,
-# }
+ITEM_PIPELINES = {
+   'eSpider.pipelines.DuplicatesPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
