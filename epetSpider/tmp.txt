@@ -1,1 +1,0 @@
-2018-03-20 10:03:07 [scrapy.core.scraper] ERROR: Error downloading <GET http://www..epet.com/app.html>: invalid hostname: www..epet.com

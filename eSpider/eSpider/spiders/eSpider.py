@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import re
-# from scrapy.exceptions import CloseSpider  # 爬虫定量停止功能未完成 issue1
+from scrapy.exceptions import CloseSpider  # 爬虫定量停止功能未完成 issue1
 import requests
 from scrapy import Selector
 
@@ -9,30 +9,38 @@ from scrapy import Selector
 class epetWholeSpider(scrapy.Spider):
 
     name = 'epet'
-    allowed_domains = ['epet.com']
-    
     # 针对eSpider的pipeline
     custom_settings = {
         'ITEM_PIPELINES':{
             'eSpider.pipelines.DuplicatesPipeline':400
         }
     }
-    # 从命令行输入url
-    def __init__(self,*args,**kwargs):
-        super(epetWholeSpider,self).__init__(*args,**kwargs)
-        self.start_urls = [kwargs.get('start_urls')]
 
-        # 输入url检错功能未完成 issue2
-        # lnk = kwargs.get('start_urls')
-        # if re.compile(r'http://www.epet.com').match(lnk) == None:
-        #     raise CloseSpider()
-        # else:
-        #     self.start_urls = [kwargs.get('start_urls')]
+    # 解析初始url格式
+    def start_requests(self):
+
+        self.count = 0 # 设置item初始个数
+        self.max_count = 500 # 设置最大个数
+
+        allowed_domains = self.settings.get('ALLOWED_DOMAINS')[0]
+
+        start_urls = self.settings.get('START_URLS')
+        if re.compile(r'http://www.epet.com').match(start_urls[0]):
+            return [scrapy.Request(start_urls[0],callback=self.parse)]
+        elif re.compile(r'http://list.epet.com').match(start_urls[0]):
+            return [scrapy.Request(start_urls[0],callback=self.parse_list)]
+        elif re.compile(r'http://item.epet.com').match(start_urls[0]):
+            return [scrapy.Request(start_urls[0],callback=self.parse_sku)]
+        else:
+            raise CloseSpider("start url is wrong!")
+
         
-    # issue1
-    # def __init__(self):
-    #   self.count = 0 # 设置item初始个数
-    #   self.max_count = 20 # 设置最大个数
+
+    
+    # 从命令行输入url功能
+    # def __init__(self,*args,**kwargs):
+    #     super(epetWholeSpider,self).__init__(*args,**kwargs)
+    #     self.start_urls = [kwargs.get('start_urls')]
     
 
     def parse(self,response):
@@ -58,20 +66,8 @@ class epetWholeSpider(scrapy.Spider):
                     if flg == 'bgwhite':
                         pass
                     else:
-                        # if text == None:
-                        #     item["link_text"] = None
-                        # else:
-                        #     item["link_text"] = text.strip(" ").strip("\n")
-                        # item["link"] = _link.group(0)
                         yield scrapy.Request(url=_link.group(0),callback=self.parse_list)
                         yield scrapy.Request(url=_link.group(0),callback=self.parse)
-    
-                        # yield item
-
-                        # issue1
-                        # self.count = self.count + 1
-                        # if self.count == self.max_count:
-                        #   raise CloseSpider('The number of extracted data is enough!')
 
     def parse_list(self,response):
 
@@ -134,7 +130,11 @@ class epetWholeSpider(scrapy.Spider):
         item['tag'] = tag 
         item['otherParams'] = paramsDict
 
-        yield item
+        self.count = self.count + 1
+        if self.count <= self.max_count:
+            yield item
+        else:
+            raise CloseSpider("Item is enough!")
 
 
 
