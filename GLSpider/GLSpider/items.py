@@ -19,3 +19,7 @@ class html2FileItem(Item):
 	url = Field()
 	title = Field()
 	html = Field()
+
+
+class skuItem(Item):
+	
