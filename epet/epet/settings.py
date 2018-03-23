@@ -14,18 +14,46 @@ BOT_NAME = 'epet'
 SPIDER_MODULES = ['epet.spiders']
 NEWSPIDER_MODULE = 'epet.spiders'
 
+ALLOWED_DOMAINS = ['jd.com',]
+START_URLS = ['https://www.jd.com']
+
+# 爬取链接domain字段
+RERULE = r'' #r'gallery-store-ALL.*?'
+#RERULE = r'list.*?' 
+
+# html文件存储文件夹
+FOLDER = "jd"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'epet (+http://www.yourdomain.com)'
 
-# Obey robots.txt rules
+
+# 是否遵循robots.txt，通常设为False，不遵守
 ROBOTSTXT_OBEY = False
+
 
 # 输出文件编码格式
 FEED_EXPORT_ENCODING = 'utf-8'
 
-# Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+
+# Scrapy提前终止四个可选条件：
+
+# 1)收到指定数目的响应之后终止爬虫
+# CLOSESPIDER_PAGECOUNT = 50
+
+# 2)抓取指定数码的Item之后终止爬虫
+# CLOSESPIDER_ITEMCOUNT = 200
+
+# 3)指定时间之后终止爬虫
+# CLOSESPIDER_TIMEOUT=100
+
+# 4)发生指定数目错误之后终止爬虫
+# CLOSESPIDER_ERROR=10
+
+
+
+# 向下载器并发发出的请求数目，默认为16
+CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -70,7 +98,9 @@ FEED_EXPORT_ENCODING = 'utf-8'
 #ITEM_PIPELINES = {
 #    'epet.pipelines.EpetPipeline': 300,
 #}
-
+ITEM_PIPELINES = {
+	'epet.pipelines.html2FilePipeline': 100,
+}
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

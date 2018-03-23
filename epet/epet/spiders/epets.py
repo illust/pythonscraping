@@ -3,18 +3,32 @@ import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.http import HtmlResponse
+from scrapy.utils.project import get_project_settings
+from scrapy.exceptions import CloseSpider  
+from epet.items import html2FileItem
+
 
 class EpetsSpider(CrawlSpider):
+    
     name = 'epets'
-    allowed_domains = ['epet.com']
-    start_urls = ['http://www.epet.com/']
+    
+    settings = get_project_settings()
+    allowed_domains = settings.get('ALLOWED_DOMAINS')
+    start_urls = settings.get('START_URLS')
+    reRule = settings.get('RERULE')
 
     rules = (
-        Rule(LinkExtractor(allow=()), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=reRule), callback='parse_item', follow=True),
     )
 
-    def parse_item(self, HtmlResponse):
+    def parse_item(self,response):
 
-        self.html_file = open('d:\\temp\\'+HtmlResponse.xpath("//title/text()").extract_first()+'.html','w',encoding='utf-8')
-        self.html_file.write(HtmlResponse.body.decode("utf-8"))
-        self.html_file.close()
+        item = html2FileItem()
+        item['url'] = response.url
+        item['title'] = response.xpath("//title").extract_first()
+        item['html'] = response.body
+
+        yield item
+
+        
+

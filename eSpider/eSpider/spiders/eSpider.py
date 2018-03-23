@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import re
-from scrapy.exceptions import CloseSpider  # 爬虫定量停止功能未完成 issue1
+from scrapy.exceptions import CloseSpider  
 import requests
 from scrapy import Selector
 
@@ -34,7 +34,7 @@ class epetWholeSpider(scrapy.Spider):
         else:
             raise CloseSpider("start url is wrong!")
 
-        
+
 
     
     # 从命令行输入url功能
