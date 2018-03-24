@@ -19,3 +19,8 @@ class html2FilePipeline(object):
         file_name = hashlib.sha224(item['url'].encode('utf-8')).hexdigest() #chose whatever hashing func works for you
         with open('%s/%s.html' % (folder,file_name), 'w+b') as f:
             f.write(item['html'])
+
+class skuItemPipeline(object):
+	def process_item(self,item,sku):
+		return item
+

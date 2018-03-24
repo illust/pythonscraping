@@ -11,7 +11,11 @@ from GLSpider.items import html2FileItem
 class htm2fSpider(CrawlSpider):
     
     name = 'htm2f'
-    
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'GLSpider.pipelines.html2FilePipeline': 100,
+            }
+    }
     settings = get_project_settings()
     allowed_domains = settings.get('ALLOWED_DOMAINS')
     start_urls = settings.get('START_URLS')

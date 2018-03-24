@@ -9,21 +9,26 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+
 BOT_NAME = 'GLSpider'
 
 SPIDER_MODULES = ['GLSpider.spiders']
 NEWSPIDER_MODULE = 'GLSpider.spiders'
 
 
-ALLOWED_DOMAINS = ['jd.com',]
-START_URLS = ['https://www.jd.com']
+ALLOWED_DOMAINS = ['epet.com',]
+START_URLS = ['http://www.epet.com']
 
-# 爬取链接domain字段
-RERULE = r'' #r'gallery-store-ALL.*?'
-#RERULE = r'list.*?' 
+# 爬取链接domain字段，针对url
+RERULE = r''
+# RERULE = r'gallery-store-ALL.*?'
+# RERULE = r'list.*?' 
+
+# url页面解析规则
+PAGERULE = r'http://item.+'
 
 # html文件存储文件夹
-FOLDER = "jd"
+FOLDER = "epet"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'epet (+http://www.yourdomain.com)'
@@ -35,6 +40,10 @@ ROBOTSTXT_OBEY = False
 
 # 输出文件编码格式
 FEED_EXPORT_ENCODING = 'utf-8'
+
+
+# 自行选择输出item字段域field
+#FEED_EXPORT_FIELDS = ['url','title','subtitle','price']
 
 
 # Scrapy提前终止条件有以下四个可选参数：
@@ -54,7 +63,12 @@ FEED_EXPORT_ENCODING = 'utf-8'
 
 
 # 向下载器并发发出的请求数目，默认为16
-CONCURRENT_REQUESTS = 1
+CONCURRENT_REQUESTS = 16
+
+# 广度优先遍历
+# DEPTH_PRIORITY = 1
+# SCHEDULER_DISK_QUEUE = 'scrapy.squeue.PickleFifoDiskQueue'
+# SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -99,9 +113,7 @@ CONCURRENT_REQUESTS = 1
 #ITEM_PIPELINES = {
 #    'epet.pipelines.EpetPipeline': 300,
 #}
-ITEM_PIPELINES = {
-	'GLSpider.pipelines.html2FilePipeline': 100,
-}
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
