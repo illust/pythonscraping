@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for GLSpider project
+# Scrapy settings for meizitu project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,92 +9,23 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'GLSpider'
+BOT_NAME = 'meizitu'
 
-SPIDER_MODULES = ['GLSpider.spiders']
-NEWSPIDER_MODULE = 'GLSpider.spiders'
-
-
-# 导入用户自定义设置
-import json
-with open("d:\setting.json",'r') as f:
-    setting = json.load(f)
-
-key = []
-value = []
-for dt in setting:
-	for k,v in dt.items():
-		key.append(k)
-		value.append(v)
-settings = dict(zip(key, value))
-
-
-
-##############################################################
-#*****************用户自定义参数部分*************************#
-# 站点限制
-ALLOWED_DOMAINS = setting['ALLOWED_DOMAINS',]
-
-# 起始网址
-START_URLS = setting['START_URLS']
-# url页面解析规则
-PAGERULE = setting['PAGERULE']
-
-# html文件存储文件夹
-FOLDER = setting['FOLDER']
-
-# 抓取指定数量的Item之后终止爬虫
-CLOSESPIDER_ITEMCOUNT = setting['CLOSESPIDER_ITEMCOUNT']
-
-# 指定时间之后终止爬虫
-CLOSESPIDER_TIMEOUT = setting['CLOSESPIDER_TIMEOUT']
-#************************************************************#
-##############################################################
-
-# 需要爬取的domain字段，针对url
-#ALLOWRULE = '' 
-
+SPIDER_MODULES = ['meizitu.spiders']
+NEWSPIDER_MODULE = 'meizitu.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0'
+#USER_AGENT = 'meizitu (+http://www.yourdomain.com)'
 
-
-# 是否遵循robots.txt，通常设为False，不遵守
+# Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
+# Configure maximum concurrent requests performed by Scrapy (default: 16)
+CONCURRENT_REQUESTS = 32
 
 # 输出文件编码格式
 FEED_EXPORT_ENCODING = 'utf-8'
-
-
-# 自行选择输出item字段域field
-#FEED_EXPORT_FIELDS = ['url','title','subtitle','price']
-
-
-# Scrapy提前终止条件有以下四个可选参数：
-
-# 1)收到指定数目的响应之后终止爬虫
-# CLOSESPIDER_PAGECOUNT = 50
-
-# 2)抓取指定数码的Item之后终止爬虫
-# CLOSESPIDER_ITEMCOUNT = 200
-
-# 3)指定时间之后终止爬虫
-# CLOSESPIDER_TIMEOUT=100
-
-# 4)发生指定数目错误之后终止爬虫
-# CLOSESPIDER_ERROR=10
-
-
-
-# 向下载器并发发出的请求数目，默认为16
-CONCURRENT_REQUESTS = 100
-
-# 广度优先遍历
-DEPTH_PRIORITY = 1
-SCHEDULER_DISK_QUEUE = 'scrapy.squeue.PickleFifoDiskQueue'
-SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -119,15 +50,14 @@ SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'GLSpider.middlewares.EpetSpiderMiddleware': 543,
+#    'meizitu.middlewares.MeizituSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'GLSpider.middlewares.customProxy.RandomProxyMiddleware':300,
-#    'GLSpider.middlewares.customUserAgent.RandomUserAgentMiddleware': 543,
-# }
+#DOWNLOADER_MIDDLEWARES = {
+#    'meizitu.middlewares.MeizituDownloaderMiddleware': 543,
+#}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -138,8 +68,18 @@ SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'GLSpider.pipelines.EpetPipeline': 300,
+#    'meizitu.pipelines.MeizituPipeline': 300,
 #}
+ITEM_PIPELINES = {
+   'scrapy.pipelines.images.ImagesPipeline': 300,
+}
+# 图片存储路径(绝对路径 or 相对路径)
+IMAGES_STORE = 'Image'
+# 该字段的值为XxxItem中定义的存储图片链接的image_urls字段
+IMAGES_URLS_FIELD='image_urls'
+# 该字段的值为XxxItem中定义的存储图片信息的images字段
+IMAGES_RESULT_FIELD='images'
+
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -161,23 +101,3 @@ SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-
-
-
-# 提高scrapy性能的一些设置
-
-# 降低log级别
-# LOG_LEVEL = 'INFO'
-
-# 禁止cookies
-COOKIES_ENABLED = False
-
-# 禁止重试
-RETRY_ENABLED = False
-
-# 减小下载超时
-DOWNLOAD_ITMEOUT = 15
-
-# 禁止重定向
-#REDIRECT_ENABLED = False
-

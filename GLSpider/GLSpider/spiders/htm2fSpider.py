@@ -7,7 +7,7 @@ from scrapy.utils.project import get_project_settings
 from scrapy.exceptions import CloseSpider  
 from GLSpider.items import html2FileItem
 
-
+# 爬取html并保存到磁盘
 class htm2fSpider(CrawlSpider):
     
     name = 'htm2f'
